@@ -2,14 +2,20 @@ const koa = require('koa')
 const app = new koa()
 const Router = require('koa-router')
 const router = new Router()
-
+const cors = require('koa2-cors')
+const ENV = 'test-51pwz'
 const playList = require('./controller/playlist.js')
 router.use('/playlist', playList.routes())
+app.use(cors({
+    origin: ['http://localhost:9528'],
+    credentials: true
+}))
+app.use(async (ctx, next) => {
+    ctx.state.env = ENV
+    await next()
+})
 app.use(router.routes())
 app.use(router.allowedMethods())
-app.use(async (ctx) => {
-    ctx.body = 'Hello World'
-})
 app.listen(3000, () => {
     console.log('服务开启')
 })
