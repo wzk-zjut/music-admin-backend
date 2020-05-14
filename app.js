@@ -6,7 +6,9 @@ const cors = require('koa2-cors')
 const koaBody = require('koa-body')
 const ENV = 'test-51pwz'
 const playList = require('./controller/playlist.js')
+const swiper = require('./controller/swiper')
 router.use('/playlist', playList.routes())
+router.use('/swiper', swiper.routes())
 app.use(cors({
     origin: ['http://localhost:9528'],
     credentials: true
