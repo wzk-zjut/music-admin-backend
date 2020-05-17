@@ -42,5 +42,22 @@ router.get('/delPlayList', async (ctx, next) => {
         data: res
     }
 })
-
+router.get('/searchList', async (ctx, next) => {
+    const params = ctx.request.query
+    const query = `db.collection('playlist').where({
+        name:db.RegExp({
+            regexp:'${params.content}',
+            options:'i'
+        })
+    }).orderBy('createTime','desc').get()`
+    const res = await callCLoudDB(ctx, 'databasequery', query)
+    let resList = []
+    for (let i = 0; i < res.data.length; i++) {
+        resList.push(JSON.parse(res.data[i]))
+    }
+    ctx.body = {
+        code: 20000,
+        data: resList
+    }
+})
 module.exports = router
